@@ -6,6 +6,27 @@
 </head>
 <body>
     <h1>☕ Coffee Loyalty</h1>
-    <p>Сервер работает!</p>
+    
+    <h2>👥 Гости</h2>
+    {% if customers %}
+    <table border="1">
+        <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Визитов</th>
+            <th>Скидка</th>
+        </tr>
+        {% for c in customers %}
+        <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Нет гостей</p>
+    {% endif %}
 </body>
 </html>
