@@ -1,5 +1,10 @@
 import sys
 import os
+from flask import Flask, render_template, request, redirect, url_for
+from services import add_customer
+
+app = Flask(__name__)
+app.secret_key = 'coffee-secret-2026'
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from flask import Flask, render_template
@@ -17,7 +22,17 @@ def index():
     customers = cursor.fetchall()
     conn.close()
     return render_template('index.html', customers=customers)
-
+    
+@app.route('/register', methods=['POST'])
+def register():
+    name = request.form.get('name', '').strip()
+    phone = request.form.get('phone', '').strip()
+    
+    if name and phone:
+        add_customer(name, phone)
+    
+    return redirect(url_for('index'))
+    
 if __name__ == '__main__':
     from db import create_table
     create_table()
