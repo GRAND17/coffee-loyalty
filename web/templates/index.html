@@ -17,6 +17,22 @@
     
     <hr>
     
+    <!-- Действия -->
+    <h2>☕ Действия</h2>
+    <form action="/check" method="POST">
+        <input type="tel" name="phone" placeholder="Телефон" required>
+        <button type="submit">☕ Отметить визит</button>
+    </form>
+    
+    <br>
+    
+    <form action="/info" method="POST">
+        <input type="tel" name="phone" placeholder="Телефон" required>
+        <button type="submit">📊 Информация</button>
+    </form>
+
+    <hr>
+    
     <!-- Таблица клиентов -->
     <h2>👥 Все гости</h2>
     {% if customers %}
