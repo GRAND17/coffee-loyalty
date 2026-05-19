@@ -5,7 +5,8 @@ import os
 SRC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')
 sys.path.insert(0, SRC_PATH)
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+
 from services import add_customer, process_visit, get_customer_info
 from db import create_table
 import sqlite3
@@ -28,12 +29,15 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
-    """Регистрация нового клиента"""
     name = request.form.get('name', '').strip()
     phone = request.form.get('phone', '').strip()
     
     if name and phone:
-        add_customer(name, phone)
+        result = add_customer(name, phone)
+        if '✅' in result:
+            flash(result, 'success')
+        else:
+            flash(result, 'error')
     
     return redirect(url_for('index'))
 
@@ -41,14 +45,22 @@ def register():
 def check():
     phone = request.form.get('phone', '').strip()
     if phone:
-        process_visit(phone)
+        result = process_visit(phone)
+        if '☕' in result:
+            flash(result, 'success')
+        elif '❌' in result:
+            flash(result, 'error')
     return redirect(url_for('index'))
 
 @app.route('/info', methods=['POST'])
 def info():
     phone = request.form.get('phone', '').strip()
     if phone:
-        get_customer_info(phone)
+        result = get_customer_info(phone)
+        if result:
+            flash(result, 'info')
+        else:
+            flash(f'Гость с номером {phone} не найден', 'error')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
